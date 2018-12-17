@@ -40,13 +40,25 @@ class App extends React.Component {
     }
 
     render(){
+        let highest = [0,0]
+        
+        for (let i = 0; i < this.votes.length; i++){
+            if (this.votes[i] > highest[0]){
+                highest = [this.votes[i],i];
+                
+            }
+        }
 
         return (
             <div>
-                <p>{this.props.anecdotes[this.state.selected]}</p>
-                <p>on saanut {this.state.votes[this.state.selected]} ääntä</p>
+                <p>{this.props.anecdotes[this.state.selected]} <br/>
+                on saanut {this.state.votes[this.state.selected]} ääntä</p>
                 <Button name={"Äänestä"} action={this.handleVote} />
                 <Button name={"seuraava"} action={this.changeSelected} />
+                
+                <h3>Eniten ääniä saanut anecdootti:</h3>
+                <p>{this.props.anecdotes[highest[1]]} <br />
+                on saanut {this.state.votes[highest[1]]} ääntä</p>
             </div>
         );
     }
