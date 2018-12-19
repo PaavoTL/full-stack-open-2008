@@ -5,12 +5,6 @@ import './index.css';
 import NumeroLista from './numerolista'
 import LisaaUusi from './lisaauusi'
 
-const promise = axios.get('http://localhost:3001/persons');
-promise.then(response => {
-    console.log(response);
-})
-console.log(promise);
-
 class App extends React.Component {
     constructor(props) {
       super(props)
@@ -26,11 +20,23 @@ class App extends React.Component {
         newNumber: '',
         filter: '',
       }
+
+      axios.get('http://localhost:3001/persons')
+        .then(response => {
+            this.implementData(response, 'persons')
+        });
       
       this.handleNameChange = this.handleNameChange.bind(this);
       this.handleNumberChange = this.handleNumberChange.bind(this);
       this.handleFilterChange = this.handleFilterChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    implementData(data,place){
+        this.setState({
+            [place]: [...data.data]
+        })
+        console.log(this.state.persons)
     }
 
     handleNameChange(e) {
