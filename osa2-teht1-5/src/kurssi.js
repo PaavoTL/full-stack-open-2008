@@ -27,8 +27,8 @@ const Otsikko = (props) => {
 
 const Sisalto = (props) => {
     const {osat} = props;
-    
     const kaikki = () => osat.map(osa => <Osa key={osa.id} nimi={osa.nimi} tehtavia={osa.tehtavia} />)
+    
     return (
         <div>
             {kaikki()}
