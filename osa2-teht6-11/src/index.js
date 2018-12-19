@@ -5,7 +5,11 @@ import './index.css';
 import NumeroLista from './numerolista'
 import LisaaUusi from './lisaauusi'
 
-
+const promise = axios.get('http://localhost:3001/persons');
+promise.then(response => {
+    console.log(response);
+})
+console.log(promise);
 
 class App extends React.Component {
     constructor(props) {
