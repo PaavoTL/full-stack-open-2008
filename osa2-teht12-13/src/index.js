@@ -8,22 +8,18 @@ class App extends React.Component {
 
         this.state = {
             countries: [],
-            show: true,
-            name:'finland'
+            show: false,
+            name:''
         }
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.getCountries = this.getCountries.bind(this);
-    }
-
-    componentDidMount(){
-        this.getCountries();
+        this.handlePickCountry = this.handlePickCountry.bind(this);
     }
 
     getCountries(){
         axios.get('https://restcountries.eu/rest/v2/name/'+ this.state.name)
         .then(response => {
-            console.log(response);
             if(response.data.length < 11){
                 this.setState({
                     countries: response.data,
@@ -45,13 +41,23 @@ class App extends React.Component {
         this.getCountries();
     }
 
+    handlePickCountry(name){
+        this.setState({
+            name: name
+        })
+        this.getCountries();
+    }
+
     render(){
+        console.log(this.state.countries);
+        console.log(this.state.name);
+
         const listing = () => {
             if(this.state.show){
-                if (this.state.countries.length = 1){
+                if (this.state.countries.length === 1){
                     return <FullCountry country={this.state.countries[0]} />;
                 } else {
-                    return <List countries={this.state.countries} />;
+                    return <List countries={this.state.countries} action={this.handlePickCountry} />;
                 }
             } else {
                 return 'Too many or no results to show'
@@ -71,7 +77,7 @@ class App extends React.Component {
 
 const List = (props) =>{
     const {countries} = props;
-    const listing = () => countries.map(country => <Country key={country.name} name={country.name} />)
+    const listing = () => countries.map(country => <Country key={country.name} name={country.name} action={props.action}/>)
     return(
         <div>
             {listing()}
@@ -81,7 +87,9 @@ const List = (props) =>{
 
 const Country = (props) => {
     return (
-        <p>{props.name}</p>
+        <div onClick={() => props.action(props.name)}>
+            <p>{props.name}</p>
+        </div>
     )
 }
 
@@ -93,7 +101,7 @@ const FullCountry = (props) => {
             <div>
                 <h3>{country.name}</h3>
                 <h5>Population: {country.population}</h5>
-                <img src={country.flag}/>
+                <img src={country.flag} width={'200px'} alt={"Flag"}/>
             </div>
         )
     } else {
