@@ -8,7 +8,7 @@ class App extends React.Component {
 
         this.state = {
             countries: [],
-            show: false,
+            show: true,
             name:''
         }
 
@@ -46,12 +46,39 @@ class App extends React.Component {
     }
 
     render(){
+        const listing = () => {
+            if(this.state.show){
+                return <List countries={this.state.countries} />;
+            } else {
+                return 'Too many or no results to show'
+            }
+        }
+
         return(
             <div>
-                find countries: <input onChange={this.handleNameChange} value={this.state.name}/>
+                <h2>
+                    find countries: <input onChange={this.handleNameChange} value={this.state.name}/>
+                </h2>
+                {listing()}
             </div>
         )
     }
+}
+
+const List = (props) =>{
+    const {countries} = props;
+    const listing = () => countries.map(country => <Country key={country.name} name={country.name} />)
+    return(
+        <div>
+            {listing()}
+        </div>
+    )
+}
+
+const Country = (props) => {
+    return (
+        <p>{props.name}</p>
+    )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
