@@ -9,35 +9,27 @@ class App extends React.Component {
     constructor(props) {
       super(props)
       this.state = {
-        persons: [
-            { name: 'Arto Hellas', num: '0400 2345226'},
-            { name: 'Jouko Hänninen', num: '050 52340529'},
-            { name: 'Martti Tienari', num: '040 123456' },
-            { name: 'Arto Järvinen', num: '040 123456' },
-            { name: 'Lea Kutvonen', num: '040 123456' }
-        ],
+        persons: [],
         newName: '',
         newNumber: '',
         filter: '',
       }
 
-      axios.get('http://localhost:3001/persons')
-        .then(response => {
-            this.implementData(response, 'persons')
-        });
-      
       this.handleNameChange = this.handleNameChange.bind(this);
       this.handleNumberChange = this.handleNumberChange.bind(this);
       this.handleFilterChange = this.handleFilterChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
     }
-
-    implementData(data,place){
-        this.setState({
-            [place]: [...data.data]
-        })
-        console.log(this.state.persons)
+    
+    componentDidMount(){
+        axios.get('http://localhost:3001/persons')
+        .then(response => {
+            console.log(response);
+            this.setState({persons: [...response.data]
+            })
+        });
     }
+
 
     handleNameChange(e) {
         this.setState({
