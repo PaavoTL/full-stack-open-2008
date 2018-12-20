@@ -9,7 +9,7 @@ class App extends React.Component {
         this.state = {
             countries: [],
             show: true,
-            name:''
+            name:'finland'
         }
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -48,7 +48,11 @@ class App extends React.Component {
     render(){
         const listing = () => {
             if(this.state.show){
-                return <List countries={this.state.countries} />;
+                if (this.state.countries.length = 1){
+                    return <FullCountry country={this.state.countries[0]} />;
+                } else {
+                    return <List countries={this.state.countries} />;
+                }
             } else {
                 return 'Too many or no results to show'
             }
@@ -81,4 +85,22 @@ const Country = (props) => {
     )
 }
 
+const FullCountry = (props) => {
+    const country = props.country;
+
+    if (country){
+        return (
+            <div>
+                <h3>{country.name}</h3>
+                <h5>Population: {country.population}</h5>
+                <img src={country.flag}/>
+            </div>
+        )
+    } else {
+        return(
+            <div>No Data</div>
+        )
+    }
+    
+}
 ReactDOM.render(<App />, document.getElementById('root'));
