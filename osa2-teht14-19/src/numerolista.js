@@ -2,10 +2,10 @@ import React from 'react';
 
 const NumeroLista = (props) => {
     const {list} = props;
-    const filter = new RegExp(props.filter, 'i')
+    const filter = new RegExp(props.filter, 'i');
     const listing = () => list.map(h => {
         if (filter.test(h.name)){
-            return (<Numero key={h.name} name={h.name} number={h.num} />)
+            return (<Numero key={h.id} name={h.name} number={h.num} id={h.id} action={props.action} />)
         }
         return false;
     });
@@ -27,6 +27,7 @@ const Numero = (props) => {
         <tr>
             <th>{props.name}</th>
             <th>{props.number}</th>
+            <th><button onClick={() => props.action(props.id,props.name)} >Poista</button></th>
         </tr>
     )
 }
