@@ -5,6 +5,7 @@ import server from './axios-module'
 import './index.css';
 import NumeroLista from './numerolista'
 import LisaaUusi from './lisaauusi'
+import Note from './virhe';
 
 class App extends React.Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class App extends React.Component {
         newName: '',
         newNumber: '',
         filter: '',
+        note: null,
       }
 
       this.handleNameChange = this.handleNameChange.bind(this);
@@ -66,7 +68,7 @@ class App extends React.Component {
                     id ++;
                     if(person.name === this.state.newName){
                         person.num = number;
-                     server.update(id, person);
+                        server.update(id, person);
                     }
                     return person;
                 })
@@ -74,7 +76,8 @@ class App extends React.Component {
                 this.setState({
                     persons: [...newArr],
                     newName: '',
-                    newNumber: ''
+                    newNumber: '',
+                    note: `${this.state.newName} updated`
                 })
             }
             return;
@@ -88,7 +91,8 @@ class App extends React.Component {
         this.setState({
             persons: [...arr,newPerson],
             newName: '',
-            newNumber: ''
+            newNumber: '',
+            note: `${newPerson.name} added`
         })
     }
   
@@ -97,10 +101,18 @@ class App extends React.Component {
         if (answer) {
             server.remove(id);
             let newArr = [...this.state.persons];
-            newArr.splice(id-1,1)
+            
+            for (let i = 0; i < newArr.length; i++){
+                if (newArr[i].name === name){
+                    newArr.splice(i,1);
+                }
+            }
+            
+            console.log(newArr, id)
             
             this.setState({
-                persons: [...newArr]
+                persons: [...newArr],
+                note: `${name} removed`
             })
         }
     }
@@ -109,6 +121,7 @@ class App extends React.Component {
       return (
         <div>
             <h2>Puhelinluettelo</h2>
+            <Note note={this.state.note} />
             rajaa näytettäviä: <input onChange={this.handleFilterChange} value={this.state.filter} />
             <LisaaUusi actions={[this.handleNameChange, this.handleNumberChange, this.handleSubmit]} values={[this.state.newName, this.state.newNumber]}/>
             <NumeroLista list={this.state.persons} filter={this.state.filter} action={this.handleRemove} />
